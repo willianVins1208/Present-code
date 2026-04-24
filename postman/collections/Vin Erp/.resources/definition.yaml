@@ -1,0 +1,22 @@
+$kind: collection
+name: Vin Erp
+description: Postman collection for testing the Item, Category, Supplier, and Inventory APIs.
+variables:
+  categoryName: Lighting
+  categoryDescription: Lamps and lighting accessories
+  categoryId: ""
+  supplierName: Bright Source
+  supplierEmail: hello@brightsource.test
+  supplierPhone: +65-6000-1111
+  supplierId: ""
+  itemName: Desk Lamp
+  itemDescription: Adjustable LED lamp
+  itemPrice: "129"
+  updatedItemName: Desk Lamp Pro
+  updatedItemDescription: Adjustable LED lamp with dimmer
+  updatedItemPrice: "159"
+  itemId: ""
+  inventoryQuantity: "25"
+  inventoryWarehouseLocation: WH-01
+  inventoryReorderLevel: "5"
+  inventoryId: ""
