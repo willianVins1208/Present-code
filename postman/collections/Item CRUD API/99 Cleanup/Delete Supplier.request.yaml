@@ -1,0 +1,11 @@
+$kind: http-request
+url: "{{baseUrl}}/api/suppliers/{{supplierId}}"
+method: DELETE
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("supplier delete status is 204", function () {
+        pm.response.to.have.status(204);
+      });
+    language: text/javascript
+order: 16000

@@ -1,0 +1,19 @@
+$kind: http-request
+url: "{{baseUrl}}/api/items/{{itemId}}"
+method: GET
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("item fetch status is 200", function () {
+        pm.response.to.have.status(200);
+      });
+      pm.test("item id matches saved id", function () {
+        var selectedItem = pm.response.json();
+        pm.expect(String(selectedItem.id)).to.eql(String(pm.collectionVariables.get("itemId")));
+      });
+      pm.test("item category matches saved category", function () {
+        var selectedItem = pm.response.json();
+        pm.expect(String(selectedItem.category.id)).to.eql(String(pm.collectionVariables.get("categoryId")));
+      });
+    language: text/javascript
+order: 10000

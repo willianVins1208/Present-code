@@ -1,0 +1,30 @@
+$kind: http-request
+name: Update Item Inventory
+url: "{{baseUrl}}/api/items/{{itemId}}/inventory"
+method: PUT
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "quantity": {{inventoryQuantity}},
+      "warehouseLocation": "{{inventoryWarehouseLocation}}",
+      "reorderLevel": {{inventoryReorderLevel}}
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("inventory upsert status is 200", function () {
+        pm.response.to.have.status(200);
+      });
+      var inventory = pm.response.json();
+      pm.collectionVariables.set("inventoryId", inventory.id);
+      pm.test("inventory item matches", function () {
+        pm.expect(String(inventory.itemId)).to.eql(String(pm.collectionVariables.get("itemId")));
+      });
+      pm.test("inventory quantity matches variable", function () {
+        pm.expect(String(inventory.quantity)).to.eql(String(pm.collectionVariables.get("inventoryQuantity")));
+      });
+    language: text/javascript
+order: 7000

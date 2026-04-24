@@ -1,0 +1,2 @@
+$kind: folder
+description: Cleanup requests that remove created resources.

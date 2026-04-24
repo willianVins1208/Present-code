@@ -1,0 +1,35 @@
+$kind: http-request
+name: Create Item
+url: "{{baseUrl}}/api/items"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "name": "{{itemName}}",
+      "description": "{{itemDescription}}",
+      "price": {{itemPrice}},
+      "categoryId": {{categoryId}},
+      "supplierId": {{supplierId}}
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("item status is 201", function () {
+        pm.response.to.have.status(201);
+      });
+      var createdItem = pm.response.json();
+      pm.collectionVariables.set("itemId", createdItem.id);
+      pm.test("item has linked category", function () {
+        pm.expect(createdItem.category.id).to.eql(Number(pm.collectionVariables.get("categoryId")));
+      });
+      pm.test("item has linked supplier", function () {
+        pm.expect(createdItem.supplier.id).to.eql(Number(pm.collectionVariables.get("supplierId")));
+      });
+      pm.test("item name matches variable", function () {
+        pm.expect(createdItem.name).to.eql(pm.collectionVariables.get("itemName"));
+      });
+    language: text/javascript
+order: 6000

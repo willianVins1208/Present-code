@@ -1,0 +1,15 @@
+$kind: http-request
+url: "{{baseUrl}}/api/items/{{itemId}}/inventory"
+method: GET
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("inventory fetch status is 200", function () {
+        pm.response.to.have.status(200);
+      });
+      pm.test("inventory quantity matches", function () {
+        var inventory = pm.response.json();
+        pm.expect(String(inventory.quantity)).to.eql(String(pm.collectionVariables.get("inventoryQuantity")));
+      });
+    language: text/javascript
+order: 8000

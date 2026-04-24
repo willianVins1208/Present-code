@@ -1,0 +1,29 @@
+$kind: http-request
+name: Create Category
+url: "{{baseUrl}}/api/categories"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "name": "{{categoryName}}",
+      "description": "{{categoryDescription}}"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("category status is 201", function () {
+        pm.response.to.have.status(201);
+      });
+      var category = pm.response.json();
+      pm.collectionVariables.set("categoryId", category.id);
+      pm.test("category id saved", function () {
+        pm.expect(category.id).to.be.a("number");
+      });
+      pm.test("category name matches variable", function () {
+        pm.expect(category.name).to.eql(pm.collectionVariables.get("categoryName"));
+      });
+    language: text/javascript
+order: 2000

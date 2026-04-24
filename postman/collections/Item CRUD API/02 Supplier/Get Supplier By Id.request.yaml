@@ -1,0 +1,19 @@
+$kind: http-request
+url: "{{baseUrl}}/api/suppliers/{{supplierId}}"
+method: GET
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("supplier fetch status is 200", function () {
+        pm.response.to.have.status(200);
+      });
+      pm.test("supplier id matches", function () {
+        var supplier = pm.response.json();
+        pm.expect(String(supplier.id)).to.eql(String(pm.collectionVariables.get("supplierId")));
+      });
+      pm.test("supplier phone matches variable", function () {
+        var supplier = pm.response.json();
+        pm.expect(supplier.phone).to.eql(pm.collectionVariables.get("supplierPhone"));
+      });
+    language: text/javascript
+order: 5000

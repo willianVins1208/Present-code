@@ -1,0 +1,30 @@
+$kind: http-request
+name: Create Supplier
+url: "{{baseUrl}}/api/suppliers"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "name": "{{supplierName}}",
+      "contactEmail": "{{supplierEmail}}",
+      "phone": "{{supplierPhone}}"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("supplier status is 201", function () {
+        pm.response.to.have.status(201);
+      });
+      var supplier = pm.response.json();
+      pm.collectionVariables.set("supplierId", supplier.id);
+      pm.test("supplier id saved", function () {
+        pm.expect(supplier.id).to.be.a("number");
+      });
+      pm.test("supplier email matches variable", function () {
+        pm.expect(supplier.contactEmail).to.eql(pm.collectionVariables.get("supplierEmail"));
+      });
+    language: text/javascript
+order: 4000

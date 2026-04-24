@@ -1,0 +1,28 @@
+$kind: http-request
+name: Update Item
+url: "{{baseUrl}}/api/items/{{itemId}}"
+method: PUT
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "name": "{{updatedItemName}}",
+      "description": "{{updatedItemDescription}}",
+      "price": {{updatedItemPrice}},
+      "categoryId": {{categoryId}},
+      "supplierId": {{supplierId}}
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("item update status is 200", function () {
+        pm.response.to.have.status(200);
+      });
+      pm.test("item is updated", function () {
+        var updatedItem = pm.response.json();
+        pm.expect(updatedItem.name).to.eql(pm.collectionVariables.get("updatedItemName"));
+      });
+    language: text/javascript
+order: 11000

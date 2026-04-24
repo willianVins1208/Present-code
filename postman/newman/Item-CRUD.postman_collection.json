@@ -1,0 +1,770 @@
+{
+  "info": {
+    "_postman_id": "22d4d67c-56dd-4dcb-bec0-78ca05d4ce10",
+    "name": "Item CRUD API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Postman collection for testing the Item, Category, Supplier, and Inventory APIs."
+  },
+  "item": [
+    {
+      "name": "00 Health",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/health",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "health"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"status is 200\", function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test(\"health response contains ok status\", function () {",
+                  "  var healthResponse = pm.response.json();",
+                  "  pm.expect(healthResponse.status).to.eql(\"ok\");",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "01 Category",
+      "item": [
+        {
+          "name": "Create Category",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"{{categoryName}}\",\n  \"description\": \"{{categoryDescription}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/categories",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "categories"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"category status is 201\", function () {",
+                  "  pm.response.to.have.status(201);",
+                  "});",
+                  "var category = pm.response.json();",
+                  "pm.collectionVariables.set(\"categoryId\", category.id);",
+                  "pm.test(\"category id saved\", function () {",
+                  "  pm.expect(category.id).to.be.a(\"number\");",
+                  "});",
+                  "pm.test(\"category name matches variable\", function () {",
+                  "  pm.expect(category.name).to.eql(pm.collectionVariables.get(\"categoryName\"));",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Category By Id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/categories/{{categoryId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "categories",
+                "{{categoryId}}"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"category fetch status is 200\", function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test(\"category id matches\", function () {",
+                  "  var category = pm.response.json();",
+                  "  pm.expect(String(category.id)).to.eql(String(pm.collectionVariables.get(\"categoryId\")));",
+                  "});",
+                  "pm.test(\"category description matches variable\", function () {",
+                  "  var category = pm.response.json();",
+                  "  pm.expect(category.description).to.eql(pm.collectionVariables.get(\"categoryDescription\"));",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "02 Supplier",
+      "item": [
+        {
+          "name": "Create Supplier",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"{{supplierName}}\",\n  \"contactEmail\": \"{{supplierEmail}}\",\n  \"phone\": \"{{supplierPhone}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/suppliers",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "suppliers"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"supplier status is 201\", function () {",
+                  "  pm.response.to.have.status(201);",
+                  "});",
+                  "var supplier = pm.response.json();",
+                  "pm.collectionVariables.set(\"supplierId\", supplier.id);",
+                  "pm.test(\"supplier id saved\", function () {",
+                  "  pm.expect(supplier.id).to.be.a(\"number\");",
+                  "});",
+                  "pm.test(\"supplier email matches variable\", function () {",
+                  "  pm.expect(supplier.contactEmail).to.eql(pm.collectionVariables.get(\"supplierEmail\"));",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Supplier By Id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/suppliers/{{supplierId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "suppliers",
+                "{{supplierId}}"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"supplier fetch status is 200\", function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test(\"supplier id matches\", function () {",
+                  "  var supplier = pm.response.json();",
+                  "  pm.expect(String(supplier.id)).to.eql(String(pm.collectionVariables.get(\"supplierId\")));",
+                  "});",
+                  "pm.test(\"supplier phone matches variable\", function () {",
+                  "  var supplier = pm.response.json();",
+                  "  pm.expect(supplier.phone).to.eql(pm.collectionVariables.get(\"supplierPhone\"));",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "03 Item",
+      "item": [
+        {
+          "name": "Create Item",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"{{itemName}}\",\n  \"description\": \"{{itemDescription}}\",\n  \"price\": {{itemPrice}},\n  \"categoryId\": {{categoryId}},\n  \"supplierId\": {{supplierId}}\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/items",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "items"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"item status is 201\", function () {",
+                  "  pm.response.to.have.status(201);",
+                  "});",
+                  "var createdItem = pm.response.json();",
+                  "pm.collectionVariables.set(\"itemId\", createdItem.id);",
+                  "pm.test(\"item has linked category\", function () {",
+                  "  pm.expect(createdItem.category.id).to.eql(Number(pm.collectionVariables.get(\"categoryId\")));",
+                  "});",
+                  "pm.test(\"item has linked supplier\", function () {",
+                  "  pm.expect(createdItem.supplier.id).to.eql(Number(pm.collectionVariables.get(\"supplierId\")));",
+                  "});",
+                  "pm.test(\"item name matches variable\", function () {",
+                  "  pm.expect(createdItem.name).to.eql(pm.collectionVariables.get(\"itemName\"));",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "04 Inventory",
+      "item": [
+        {
+          "name": "Update Item Inventory",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"quantity\": {{inventoryQuantity}},\n  \"warehouseLocation\": \"{{inventoryWarehouseLocation}}\",\n  \"reorderLevel\": {{inventoryReorderLevel}}\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/items/{{itemId}}/inventory",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "items",
+                "{{itemId}}",
+                "inventory"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"inventory upsert status is 200\", function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});",
+                  "var inventory = pm.response.json();",
+                  "pm.collectionVariables.set(\"inventoryId\", inventory.id);",
+                  "pm.test(\"inventory item matches\", function () {",
+                  "  pm.expect(String(inventory.itemId)).to.eql(String(pm.collectionVariables.get(\"itemId\")));",
+                  "});",
+                  "pm.test(\"inventory quantity matches variable\", function () {",
+                  "  pm.expect(String(inventory.quantity)).to.eql(String(pm.collectionVariables.get(\"inventoryQuantity\")));",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Item Inventory",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/items/{{itemId}}/inventory",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "items",
+                "{{itemId}}",
+                "inventory"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"inventory fetch status is 200\", function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test(\"inventory quantity matches\", function () {",
+                  "  var inventory = pm.response.json();",
+                  "  pm.expect(String(inventory.quantity)).to.eql(String(pm.collectionVariables.get(\"inventoryQuantity\")));",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "List Inventories",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/inventories",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "inventories"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"inventories status is 200\", function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test(\"inventory list contains created record\", function () {",
+                  "  var inventories = pm.response.json();",
+                  "  pm.expect(inventories.some(function (entry) { return String(entry.id) === String(pm.collectionVariables.get(\"inventoryId\")); })).to.eql(true);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "05 Item Lifecycle",
+      "item": [
+        {
+          "name": "List Items",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/items",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "items"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"items status is 200\", function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test(\"response is an array\", function () {",
+                  "  var itemList = pm.response.json();",
+                  "  pm.expect(itemList).to.be.an(\"array\");",
+                  "  var matchedItem = itemList.find(function (entry) {",
+                  "    return String(entry.id) === String(pm.collectionVariables.get(\"itemId\"));",
+                  "  });",
+                  "  pm.expect(String(matchedItem.inventory.quantity)).to.eql(String(pm.collectionVariables.get(\"inventoryQuantity\")));",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Item By Id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/items/{{itemId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "items",
+                "{{itemId}}"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"item fetch status is 200\", function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test(\"item id matches saved id\", function () {",
+                  "  var selectedItem = pm.response.json();",
+                  "  pm.expect(String(selectedItem.id)).to.eql(String(pm.collectionVariables.get(\"itemId\")));",
+                  "});",
+                  "pm.test(\"item category matches saved category\", function () {",
+                  "  var selectedItem = pm.response.json();",
+                  "  pm.expect(String(selectedItem.category.id)).to.eql(String(pm.collectionVariables.get(\"categoryId\")));",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Update Item",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"{{updatedItemName}}\",\n  \"description\": \"{{updatedItemDescription}}\",\n  \"price\": {{updatedItemPrice}},\n  \"categoryId\": {{categoryId}},\n  \"supplierId\": {{supplierId}}\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/items/{{itemId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "items",
+                "{{itemId}}"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"item update status is 200\", function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test(\"item is updated\", function () {",
+                  "  var updatedItem = pm.response.json();",
+                  "  pm.expect(updatedItem.name).to.eql(pm.collectionVariables.get(\"updatedItemName\"));",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Delete Item",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/items/{{itemId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "items",
+                "{{itemId}}"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"item delete status is 204\", function () {",
+                  "  pm.response.to.have.status(204);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Deleted Item",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/items/{{itemId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "items",
+                "{{itemId}}"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"deleted item status is 404\", function () {",
+                  "  pm.response.to.have.status(404);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Deleted Item Inventory",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/items/{{itemId}}/inventory",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "items",
+                "{{itemId}}",
+                "inventory"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"deleted item inventory status is 404\", function () {",
+                  "  pm.response.to.have.status(404);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "99 Cleanup",
+      "item": [
+        {
+          "name": "Delete Category",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/categories/{{categoryId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "categories",
+                "{{categoryId}}"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"category delete status is 204\", function () {",
+                  "  pm.response.to.have.status(204);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Delete Supplier",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/suppliers/{{supplierId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "suppliers",
+                "{{supplierId}}"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"supplier delete status is 204\", function () {",
+                  "  pm.response.to.have.status(204);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "categoryName",
+      "value": "Lighting"
+    },
+    {
+      "key": "categoryDescription",
+      "value": "Lamps and lighting accessories"
+    },
+    {
+      "key": "categoryId",
+      "value": ""
+    },
+    {
+      "key": "supplierName",
+      "value": "Bright Source"
+    },
+    {
+      "key": "supplierEmail",
+      "value": "hello@brightsource.test"
+    },
+    {
+      "key": "supplierPhone",
+      "value": "+65-6000-1111"
+    },
+    {
+      "key": "supplierId",
+      "value": ""
+    },
+    {
+      "key": "itemName",
+      "value": "Desk Lamp"
+    },
+    {
+      "key": "itemDescription",
+      "value": "Adjustable LED lamp"
+    },
+    {
+      "key": "itemPrice",
+      "value": "129"
+    },
+    {
+      "key": "updatedItemName",
+      "value": "Desk Lamp Pro"
+    },
+    {
+      "key": "updatedItemDescription",
+      "value": "Adjustable LED lamp with dimmer"
+    },
+    {
+      "key": "updatedItemPrice",
+      "value": "159"
+    },
+    {
+      "key": "itemId",
+      "value": ""
+    },
+    {
+      "key": "inventoryQuantity",
+      "value": "25"
+    },
+    {
+      "key": "inventoryWarehouseLocation",
+      "value": "WH-01"
+    },
+    {
+      "key": "inventoryReorderLevel",
+      "value": "5"
+    },
+    {
+      "key": "inventoryId",
+      "value": ""
+    }
+  ]
+}
