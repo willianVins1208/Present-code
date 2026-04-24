@@ -66,4 +66,6 @@ Postman files are stored in:
 - `postman/collections/Item-CRUD.postman_collection.json`
 - `postman/environments/local.postman_environment.json`
 
+The environment file in Git is a shared template. Keep secrets such as tokens and passwords out of the repository.
+
 If you use Postman Desktop with Native Git, edit the collection in `Local View`, then commit and push the resulting file changes with Git.
