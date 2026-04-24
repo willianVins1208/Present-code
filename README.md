@@ -8,6 +8,7 @@ Simple Node.js project with:
 - Jest unit/API tests
 - Postman collection
 - Newman CLI test runner
+- Postman Native Git layout
 
 ## Install
 
@@ -59,3 +60,10 @@ npm run test:postman
 ```
 
 Before running Newman, start the server with `npm start`.
+
+Postman files are stored in:
+
+- `postman/collections/Item-CRUD.postman_collection.json`
+- `postman/environments/local.postman_environment.json`
+
+If you use Postman Desktop with Native Git, edit the collection in `Local View`, then commit and push the resulting file changes with Git.
